@@ -114,14 +114,14 @@ class FieldCreate(BaseModel):
     name: str
     crop_type: str
     start_date: str
-    health_index: float = Field(ge=0, le=100)
+    health_index: float = PydanticField(ge=0, le=100)
     coordinates: List[FieldCoordinates]
 
 class FieldUpdate(BaseModel):
     name: Optional[str] = None
     crop_type: Optional[str] = None
     start_date: Optional[str] = None
-    health_index: Optional[float] = Field(None, ge=0, le=100)
+    health_index: Optional[float] = PydanticField(None, ge=0, le=100)
     coordinates: Optional[List[FieldCoordinates]] = None
 
 
