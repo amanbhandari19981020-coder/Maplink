@@ -103,7 +103,11 @@
 #====================================================================================================
 
 
-user_problem_statement: "Remove polygon drawing option from Add Field dialog and keep only KML file upload functionality"
+user_problem_statement: |
+  1. Remove polygon drawing option from Add Field dialog and keep only KML file upload functionality
+  2. Add custom attributes for each field: Farmer Name, Contact Number
+  3. Show only selected field on map (hide others)
+  4. Integrate Google Earth Engine App for health index analysis
 
 backend:
   - task: "KML parse endpoint"
