@@ -142,7 +142,7 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-gray-900">Add New Field</DialogTitle>
           <DialogDescription>
-            Enter field details and define boundaries using map drawing or KML upload
+            Enter field details and upload a KML file to define field boundaries
           </DialogDescription>
         </DialogHeader>
 
@@ -203,98 +203,63 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
             </div>
           </div>
 
-          {/* Boundary Definition Tabs */}
+          {/* KML Upload Section */}
           <div className="space-y-4">
-            <Label className="font-medium text-base">Field Boundaries</Label>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2 bg-green-100">
-                <TabsTrigger value="draw" className="data-[state=active]:bg-green-600 data-[state=active]:text-white">Draw on Map</TabsTrigger>
-                <TabsTrigger value="upload" className="data-[state=active]:bg-green-600 data-[state=active]:text-white">Upload KML</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="draw" className="space-y-3">
+            <Label className="font-medium text-base">Field Boundaries (KML Upload)</Label>
+            
+            <div className="border-2 border-dashed border-green-300 rounded-lg p-8 text-center bg-green-50/50">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".kml"
+                onChange={handleKMLUpload}
+                className="hidden"
+                id="kml-upload"
+                data-testid="kml-file-input"
+              />
+              <label htmlFor="kml-upload" className="cursor-pointer">
+                <div className="flex flex-col items-center space-y-3">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                    <FileUp className="w-8 h-8 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="text-base font-medium text-gray-900 mb-1">
+                      {uploadingKML ? 'Uploading...' : 'Click to upload KML file'}
+                    </p>
+                    <p className="text-sm text-gray-600">Upload a KML file to define field boundaries</p>
+                  </div>
+                  {formData.coordinates.length > 0 && (
+                    <div className="mt-3 px-4 py-2 bg-green-100 rounded-lg">
+                      <p className="text-sm font-medium text-green-800">
+                        ✓ {formData.coordinates.length} coordinates loaded from KML
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </label>
+            </div>
+
+            {/* Map Preview */}
+            {formData.coordinates.length > 0 && (
+              <div className="space-y-2">
+                <Label className="font-medium text-sm text-gray-700">Preview</Label>
                 <div className="border-2 border-green-200 rounded-lg overflow-hidden">
                   <div ref={mapRef} style={{ height: '350px' }} data-testid="add-field-map" />
                 </div>
-                <div className="flex items-center justify-between pt-2">
-                  <p className="text-sm text-gray-600 flex items-center">
-                    <MapPin className="w-4 h-4 inline mr-1 text-green-600" />
-                    <span className="font-medium">{formData.coordinates.length}</span> points drawn
-                  </p>
-                  <div className="space-x-2">
-                    {!isDrawing ? (
-                      <Button
-                        type="button"
-                        onClick={handleStartDrawing}
-                        variant="outline"
-                        size="sm"
-                        data-testid="start-drawing-button"
-                        className="border-green-500 text-green-700 hover:bg-green-50"
-                      >
-                        Start Drawing
-                      </Button>
-                    ) : (
-                      <Button
-                        type="button"
-                        onClick={() => setIsDrawing(false)}
-                        variant="outline"
-                        size="sm"
-                        data-testid="stop-drawing-button"
-                        className="border-green-500 text-green-700 hover:bg-green-50"
-                      >
-                        Stop Drawing
-                      </Button>
-                    )}
-                    <Button
-                      type="button"
-                      onClick={handleClearDrawing}
-                      variant="outline"
-                      size="sm"
-                      data-testid="clear-drawing-button"
-                    >
-                      Clear
-                    </Button>
-                  </div>
+                <div className="flex justify-end pt-2">
+                  <Button
+                    type="button"
+                    onClick={handleClearKML}
+                    variant="outline"
+                    size="sm"
+                    data-testid="clear-kml-button"
+                    className="border-red-300 text-red-600 hover:bg-red-50"
+                  >
+                    Clear KML
+                  </Button>
                 </div>
-              </TabsContent>
-              
-              <TabsContent value="upload" className="space-y-3">
-                <div className="border-2 border-dashed border-green-300 rounded-lg p-8 text-center bg-green-50/50">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".kml"
-                    onChange={handleKMLUpload}
-                    className="hidden"
-                    id="kml-upload"
-                    data-testid="kml-file-input"
-                  />
-                  <label htmlFor="kml-upload" className="cursor-pointer">
-                    <div className="flex flex-col items-center space-y-3">
-                      <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                        <FileUp className="w-8 h-8 text-green-600" />
-                      </div>
-                      <div>
-                        <p className="text-base font-medium text-gray-900 mb-1">
-                          {uploadingKML ? 'Uploading...' : 'Click to upload KML file'}
-                        </p>
-                        <p className="text-sm text-gray-600">or drag and drop your KML file here</p>
-                      </div>
-                      {formData.coordinates.length > 0 && (
-                        <div className="mt-3 px-4 py-2 bg-green-100 rounded-lg">
-                          <p className="text-sm font-medium text-green-800">
-                            ✓ {formData.coordinates.length} coordinates loaded from KML
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </label>
-                </div>
-                <div className="border-2 border-green-200 rounded-lg overflow-hidden">
-                  <div ref={mapRef} style={{ height: '350px' }} data-testid="add-field-map-kml" />
-                </div>
-              </TabsContent>
-            </Tabs>
+              </div>
+            )}
           </div>
 
           <div className="flex justify-end space-x-3 pt-4 border-t">
