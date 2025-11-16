@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar, Sprout, TrendingUp, Edit2, Trash2, Save, X } from 'lucide-react';
+import { Calendar, Sprout, TrendingUp, Edit2, Trash2, Save, X, User, Phone, Map } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,15 +14,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import GEEAppModal from './GEEAppModal';
 
 export default function FieldDetails({ field, onUpdate, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showGEEModal, setShowGEEModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     crop_type: '',
     start_date: '',
-    health_index: 0
+    health_index: 0,
+    farmer_name: '',
+    contact_number: ''
   });
 
   const startEditing = () => {
@@ -30,7 +34,9 @@ export default function FieldDetails({ field, onUpdate, onDelete }) {
       name: field.name,
       crop_type: field.crop_type,
       start_date: field.start_date,
-      health_index: field.health_index
+      health_index: field.health_index,
+      farmer_name: field.farmer_name || '',
+      contact_number: field.contact_number || ''
     });
     setIsEditing(true);
   };
@@ -133,6 +139,61 @@ export default function FieldDetails({ field, onUpdate, onDelete }) {
       </div>
 
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        {/* Health Index Analysis Button */}
+        <div>
+          <Button
+            onClick={() => setShowGEEModal(true)}
+            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg"
+            data-testid="health-analysis-button"
+          >
+            <Map className="w-4 h-4 mr-2" />
+            Health Index Analysis (GEE)
+          </Button>
+        </div>
+
+        <Separator />
+
+        {/* Farmer Info */}
+        <div className="space-y-2">
+          <Label className="text-sm text-gray-700 flex items-center font-medium">
+            <User className="w-4 h-4 mr-2 text-green-600" />
+            Farmer Name
+          </Label>
+          {isEditing ? (
+            <Input
+              value={formData.farmer_name}
+              onChange={(e) => setFormData(prev => ({ ...prev, farmer_name: e.target.value }))}
+              data-testid="edit-farmer-name"
+              className="border-2 border-green-300 focus:border-green-500"
+            />
+          ) : (
+            <p className="text-base font-medium text-gray-900" data-testid="field-detail-farmer">{field.farmer_name || 'N/A'}</p>
+          )}
+        </div>
+
+        <Separator />
+
+        {/* Contact Number */}
+        <div className="space-y-2">
+          <Label className="text-sm text-gray-700 flex items-center font-medium">
+            <Phone className="w-4 h-4 mr-2 text-green-600" />
+            Contact Number
+          </Label>
+          {isEditing ? (
+            <Input
+              type="tel"
+              value={formData.contact_number}
+              onChange={(e) => setFormData(prev => ({ ...prev, contact_number: e.target.value }))}
+              data-testid="edit-contact-number"
+              className="border-2 border-green-300 focus:border-green-500"
+            />
+          ) : (
+            <p className="text-base font-medium text-gray-900" data-testid="field-detail-contact">{field.contact_number || 'N/A'}</p>
+          )}
+        </div>
+
+        <Separator />
+
         {/* Crop Type */}
         <div className="space-y-2">
           <Label className="text-sm text-gray-700 flex items-center font-medium">
@@ -228,6 +289,13 @@ export default function FieldDetails({ field, onUpdate, onDelete }) {
           </div>
         </div>
       </div>
+
+      {/* GEE App Modal */}
+      <GEEAppModal 
+        open={showGEEModal} 
+        onClose={() => setShowGEEModal(false)} 
+        field={field}
+      />
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
