@@ -45,57 +45,50 @@ export default function FieldMap({ fields, selectedField, onSelectField }) {
     layersRef.current.forEach(layer => mapInstanceRef.current.removeLayer(layer));
     layersRef.current = [];
 
-    if (fields.length === 0) return;
+    // Only show the selected field
+    if (!selectedField || !selectedField.coordinates || selectedField.coordinates.length < 3) {
+      return;
+    }
 
-    const bounds = [];
+    const latlngs = selectedField.coordinates.map(coord => [coord.lat, coord.lng]);
+    
+    const polygon = L.polygon(latlngs, {
+      color: '#16a34a',
+      fillColor: '#16a34a',
+      fillOpacity: 0.4,
+      weight: 3,
+    }).addTo(mapInstanceRef.current);
 
-    // Add polygons for each field
-    fields.forEach(field => {
-      if (!field.coordinates || field.coordinates.length < 3) return;
-
-      const latlngs = field.coordinates.map(coord => [coord.lat, coord.lng]);
-      
-      const isSelected = selectedField?.id === field.id;
-      
-      const polygon = L.polygon(latlngs, {
-        color: isSelected ? '#16a34a' : '#10b981',
-        fillColor: isSelected ? '#16a34a' : '#10b981',
-        fillOpacity: isSelected ? 0.4 : 0.2,
-        weight: isSelected ? 3 : 2,
-      }).addTo(mapInstanceRef.current);
-
-      polygon.on('click', () => {
-        onSelectField(field);
-      });
-
-      polygon.bindPopup(`
-        <div class="font-sans">
-          <h3 class="font-bold text-base mb-1">${field.name}</h3>
-          <p class="text-sm text-gray-600 mb-2">${field.crop_type}</p>
-          <div class="text-xs">
-            <div class="flex justify-between mb-1">
-              <span class="text-gray-500">Health:</span>
-              <span class="font-medium">${field.health_index}%</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-gray-500">Started:</span>
-              <span class="font-medium">${field.start_date}</span>
-            </div>
+    polygon.bindPopup(`
+      <div class="font-sans">
+        <h3 class="font-bold text-base mb-1">${selectedField.name}</h3>
+        <p class="text-sm text-gray-600 mb-2">${selectedField.crop_type}</p>
+        <div class="text-xs">
+          <div class="flex justify-between mb-1">
+            <span class="text-gray-500">Health:</span>
+            <span class="font-medium">${selectedField.health_index}%</span>
+          </div>
+          <div class="flex justify-between mb-1">
+            <span class="text-gray-500">Started:</span>
+            <span class="font-medium">${selectedField.start_date}</span>
+          </div>
+          <div class="flex justify-between mb-1">
+            <span class="text-gray-500">Farmer:</span>
+            <span class="font-medium">${selectedField.farmer_name || 'N/A'}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Contact:</span>
+            <span class="font-medium">${selectedField.contact_number || 'N/A'}</span>
           </div>
         </div>
-      `);
+      </div>
+    `);
 
-      layersRef.current.push(polygon);
+    layersRef.current.push(polygon);
 
-      // Collect bounds
-      latlngs.forEach(coord => bounds.push(coord));
-    });
-
-    // Fit map to bounds
-    if (bounds.length > 0) {
-      mapInstanceRef.current.fitBounds(bounds, { padding: [50, 50] });
-    }
-  }, [fields, selectedField, onSelectField]);
+    // Fit map to selected field bounds
+    mapInstanceRef.current.fitBounds(latlngs, { padding: [50, 50] });
+  }, [selectedField]);
 
   const toggleMapLayer = () => {
     if (!mapInstanceRef.current || !tileLayerRef.current) return;
