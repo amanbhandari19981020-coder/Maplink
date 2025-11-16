@@ -39,9 +39,6 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
         attribution: '© OpenStreetMap contributors',
         maxZoom: 19,
       }).addTo(mapInstanceRef.current);
-
-      // Handle map clicks for drawing
-      mapInstanceRef.current.on('click', handleMapClick);
     }
 
     return () => {
