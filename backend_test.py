@@ -375,6 +375,10 @@ class CropHealthAPITester:
         self.test_get_single_field()
         self.test_update_field()
         self.test_delete_field()
+        
+        # KML Tests
+        print("\n📄 KML PARSING TESTS")
+        self.test_kml_parsing()
 
         # Print Summary
         print("\n" + "=" * 60)
