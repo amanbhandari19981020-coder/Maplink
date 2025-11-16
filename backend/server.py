@@ -77,33 +77,39 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
 def parse_kml_coordinates(kml_content: bytes) -> List[Dict[str, float]]:
     """Parse KML file and extract coordinates"""
     try:
-        k = kml.KML()
-        k.from_string(kml_content)
+        # Parse using lxml directly for better compatibility
+        root = etree.fromstring(kml_content)
+        
+        # Define namespace
+        ns = {'kml': 'http://www.opengis.net/kml/2.2'}
         
         coordinates = []
         
-        # Iterate through KML features
-        for feature in k.features:
-            for placemark in feature.features:
-                if hasattr(placemark, 'geometry') and placemark.geometry:
-                    geom = placemark.geometry
-                    
-                    # Handle Polygon
-                    if geom.geom_type == 'Polygon':
-                        coords = geom.exterior.coords
-                        for coord in coords:
-                            coordinates.append({'lat': coord[1], 'lng': coord[0]})
-                    # Handle LineString
-                    elif geom.geom_type == 'LineString':
-                        coords = geom.coords
-                        for coord in coords:
-                            coordinates.append({'lat': coord[1], 'lng': coord[0]})
-                    # Handle Point
-                    elif geom.geom_type == 'Point':
-                        coord = geom.coords[0]
-                        coordinates.append({'lat': coord[1], 'lng': coord[0]})
+        # Find all coordinate elements
+        coord_elements = root.xpath('//kml:coordinates', namespaces=ns)
+        
+        for coord_elem in coord_elements:
+            coord_text = coord_elem.text.strip()
+            if coord_text:
+                # Split by whitespace and newlines
+                coord_pairs = coord_text.split()
+                for coord_pair in coord_pairs:
+                    if coord_pair.strip():
+                        parts = coord_pair.strip().split(',')
+                        if len(parts) >= 2:
+                            try:
+                                lng = float(parts[0])
+                                lat = float(parts[1])
+                                coordinates.append({'lat': lat, 'lng': lng})
+                            except ValueError:
+                                continue
+        
+        if len(coordinates) < 3:
+            raise HTTPException(status_code=400, detail="KML file must contain at least 3 coordinates")
         
         return coordinates
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid KML file: {str(e)}")
 
