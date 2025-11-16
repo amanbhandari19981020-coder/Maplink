@@ -320,6 +320,8 @@ async def create_field(field_data: FieldCreate, current_user: dict = Depends(get
         crop_type=field_data.crop_type,
         start_date=field_data.start_date,
         health_index=field_data.health_index,
+        farmer_name=field_data.farmer_name,
+        contact_number=field_data.contact_number,
         coordinates=field_data.coordinates
     )
     
