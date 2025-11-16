@@ -83,8 +83,8 @@ def parse_kml_coordinates(kml_content: bytes) -> List[Dict[str, float]]:
         coordinates = []
         
         # Iterate through KML features
-        for feature in k.features():
-            for placemark in feature.features():
+        for feature in k.features:
+            for placemark in feature.features:
                 if hasattr(placemark, 'geometry') and placemark.geometry:
                     geom = placemark.geometry
                     
