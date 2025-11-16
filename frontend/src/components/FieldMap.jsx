@@ -130,11 +130,11 @@ export default function FieldMap({ fields, selectedField, onSelectField }) {
         </Button>
       </div>
 
-      {fields.length === 0 && (
+      {!selectedField && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm pointer-events-none">
           <div className="text-center text-gray-500">
-            <p className="text-lg font-medium">No fields to display</p>
-            <p className="text-sm mt-1">Add a field to see it on the map</p>
+            <p className="text-lg font-medium">No field selected</p>
+            <p className="text-sm mt-1">Select a field from the list to view on map</p>
           </div>
         </div>
       )}
