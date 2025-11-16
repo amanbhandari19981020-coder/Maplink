@@ -279,16 +279,28 @@ async def get_me(current_user: dict = Depends(get_current_user)):
 @api_router.post("/kml/parse", response_model=KMLParseResponse)
 async def parse_kml(file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
     """Parse uploaded KML file and return coordinates"""
-    if not file.filename.endswith('.kml'):
-        raise HTTPException(status_code=400, detail="File must be a KML file")
-    
-    content = await file.read()
-    coordinates = parse_kml_coordinates(content)
-    
-    if len(coordinates) < 3:
-        raise HTTPException(status_code=400, detail="KML file must contain at least 3 coordinates")
-    
-    return KMLParseResponse(coordinates=[FieldCoordinates(**coord) for coord in coordinates])
+    try:
+        logger.info(f"Received KML file: {file.filename}")
+        
+        if not file.filename.endswith('.kml'):
+            logger.error(f"Invalid file extension: {file.filename}")
+            raise HTTPException(status_code=400, detail="File must be a KML file")
+        
+        content = await file.read()
+        logger.info(f"KML file size: {len(content)} bytes")
+        
+        coordinates = parse_kml_coordinates(content)
+        logger.info(f"Parsed {len(coordinates)} coordinates from KML")
+        
+        if len(coordinates) < 3:
+            raise HTTPException(status_code=400, detail="KML file must contain at least 3 coordinates")
+        
+        return KMLParseResponse(coordinates=[FieldCoordinates(**coord) for coord in coordinates])
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error parsing KML: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=400, detail=f"Failed to parse KML file: {str(e)}")
 
 
 # Field Routes
