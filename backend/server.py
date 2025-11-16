@@ -101,14 +101,14 @@ class FieldCoordinates(BaseModel):
 class Field(BaseModel):
     model_config = ConfigDict(extra="ignore")
     
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    id: str = PydanticField(default_factory=lambda: str(uuid.uuid4()))
     user_id: str
     name: str
     crop_type: str
     start_date: str
-    health_index: float = Field(ge=0, le=100)
+    health_index: float = PydanticField(ge=0, le=100)
     coordinates: List[FieldCoordinates]
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = PydanticField(default_factory=lambda: datetime.now(timezone.utc))
 
 class FieldCreate(BaseModel):
     name: str
