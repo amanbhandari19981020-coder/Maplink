@@ -80,29 +80,58 @@ def parse_kml_coordinates(kml_content: bytes) -> List[Dict[str, float]]:
         # Parse using lxml directly for better compatibility
         root = etree.fromstring(kml_content)
         
-        # Define namespace
-        ns = {'kml': 'http://www.opengis.net/kml/2.2'}
+        # Try multiple namespace approaches for better compatibility
+        namespaces = [
+            {'kml': 'http://www.opengis.net/kml/2.2'},
+            {'kml': 'http://earth.google.com/kml/2.2'},
+            {'kml': 'http://earth.google.com/kml/2.1'},
+            {'kml': 'http://earth.google.com/kml/2.0'}
+        ]
         
         coordinates = []
         
-        # Find all coordinate elements
-        coord_elements = root.xpath('//kml:coordinates', namespaces=ns)
+        # Try with namespaces first
+        for ns in namespaces:
+            coord_elements = root.xpath('//kml:coordinates', namespaces=ns)
+            if coord_elements:
+                for coord_elem in coord_elements:
+                    if coord_elem.text:
+                        coord_text = coord_elem.text.strip()
+                        if coord_text:
+                            # Split by whitespace and newlines
+                            coord_pairs = coord_text.split()
+                            for coord_pair in coord_pairs:
+                                if coord_pair.strip():
+                                    parts = coord_pair.strip().split(',')
+                                    if len(parts) >= 2:
+                                        try:
+                                            lng = float(parts[0])
+                                            lat = float(parts[1])
+                                            coordinates.append({'lat': lat, 'lng': lng})
+                                        except ValueError:
+                                            continue
+                if coordinates:
+                    break
         
-        for coord_elem in coord_elements:
-            coord_text = coord_elem.text.strip()
-            if coord_text:
-                # Split by whitespace and newlines
-                coord_pairs = coord_text.split()
-                for coord_pair in coord_pairs:
-                    if coord_pair.strip():
-                        parts = coord_pair.strip().split(',')
-                        if len(parts) >= 2:
-                            try:
-                                lng = float(parts[0])
-                                lat = float(parts[1])
-                                coordinates.append({'lat': lat, 'lng': lng})
-                            except ValueError:
-                                continue
+        # Fallback: try without namespace
+        if not coordinates:
+            coord_elements = root.xpath('//coordinates')
+            for coord_elem in coord_elements:
+                if coord_elem.text:
+                    coord_text = coord_elem.text.strip()
+                    if coord_text:
+                        # Split by whitespace and newlines
+                        coord_pairs = coord_text.split()
+                        for coord_pair in coord_pairs:
+                            if coord_pair.strip():
+                                parts = coord_pair.strip().split(',')
+                                if len(parts) >= 2:
+                                    try:
+                                        lng = float(parts[0])
+                                        lat = float(parts[1])
+                                        coordinates.append({'lat': lat, 'lng': lng})
+                                    except ValueError:
+                                        continue
         
         if len(coordinates) < 3:
             raise HTTPException(status_code=400, detail="KML file must contain at least 3 coordinates")
