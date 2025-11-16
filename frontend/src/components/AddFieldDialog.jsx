@@ -210,6 +210,33 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
                 className="border-2 border-gray-200 focus:border-green-500"
               />
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="farmer_name" className="font-medium">Farmer Name</Label>
+              <Input
+                id="farmer_name"
+                placeholder="John Doe"
+                value={formData.farmer_name}
+                onChange={(e) => setFormData(prev => ({ ...prev, farmer_name: e.target.value }))}
+                required
+                data-testid="add-field-farmer-input"
+                className="border-2 border-gray-200 focus:border-green-500"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="contact_number" className="font-medium">Contact Number</Label>
+              <Input
+                id="contact_number"
+                type="tel"
+                placeholder="+91-9876543210"
+                value={formData.contact_number}
+                onChange={(e) => setFormData(prev => ({ ...prev, contact_number: e.target.value }))}
+                required
+                data-testid="add-field-contact-input"
+                className="border-2 border-gray-200 focus:border-green-500"
+              />
+            </div>
           </div>
 
           {/* KML Upload Section */}
