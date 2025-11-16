@@ -89,8 +89,8 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
       const coordinates = response.data.coordinates;
       setFormData(prev => ({ ...prev, coordinates }));
 
-      // Clear existing drawings
-      handleClearDrawing();
+      // Clear existing polygon
+      handleClearKML();
 
       // Draw the KML boundaries on map
       const latlngs = coordinates.map(coord => [coord.lat, coord.lng]);
@@ -109,9 +109,6 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
       toast.error(error.response?.data?.detail || 'Failed to parse KML file');
     } finally {
       setUploadingKML(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
     }
   };
 
