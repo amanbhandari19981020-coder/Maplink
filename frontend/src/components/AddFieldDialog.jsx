@@ -87,10 +87,15 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
       });
 
       const coordinates = response.data.coordinates;
-      setFormData(prev => ({ ...prev, coordinates }));
+      
+      // Clear existing polygon first
+      if (polygonRef.current && mapInstanceRef.current) {
+        mapInstanceRef.current.removeLayer(polygonRef.current);
+        polygonRef.current = null;
+      }
 
-      // Clear existing polygon
-      handleClearKML();
+      // Set the new coordinates
+      setFormData(prev => ({ ...prev, coordinates }));
 
       // Draw the KML boundaries on map
       const latlngs = coordinates.map(coord => [coord.lat, coord.lng]);
