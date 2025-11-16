@@ -233,6 +233,8 @@ async def register(user_data: UserRegister):
         crop_type="Wheat",
         start_date="2024-11-01",
         health_index=85.0,
+        farmer_name="Demo Farmer",
+        contact_number="+91-9876543210",
         coordinates=[
             FieldCoordinates(lat=28.7041, lng=77.1025),
             FieldCoordinates(lat=28.7051, lng=77.1025),
