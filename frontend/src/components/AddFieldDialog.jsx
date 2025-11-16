@@ -116,7 +116,7 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
     e.preventDefault();
 
     if (formData.coordinates.length < 3) {
-      toast.error('Please add at least 3 boundary points (draw or upload KML)');
+      toast.error('Please upload a KML file with at least 3 boundary points');
       return;
     }
 
@@ -132,9 +132,7 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
       health_index: 75,
       coordinates: []
     });
-    setIsDrawing(false);
-    setActiveTab('draw');
-    handleClearDrawing();
+    handleClearKML();
     onClose();
   };
 
