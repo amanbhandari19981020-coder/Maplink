@@ -296,6 +296,64 @@ class CropHealthAPITester:
         self.token = original_token
         return success
 
+    def test_kml_parsing(self):
+        """Test KML file parsing"""
+        import requests
+        
+        # Create a simple KML content
+        kml_content = '''<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Test Field</name>
+    <Placemark>
+      <name>Test Field</name>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              77.1025,28.7041,0
+              77.1025,28.7051,0
+              77.1045,28.7051,0
+              77.1045,28.7041,0
+              77.1025,28.7041,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>'''
+        
+        # Write to temporary file
+        with open('/tmp/test_field.kml', 'w') as f:
+            f.write(kml_content)
+        
+        try:
+            url = f"{self.api_url}/kml/parse"
+            headers = {'Authorization': f'Bearer {self.token}'}
+            
+            with open('/tmp/test_field.kml', 'rb') as f:
+                files = {'file': ('test_field.kml', f, 'application/vnd.google-earth.kml+xml')}
+                response = requests.post(url, files=files, headers=headers, timeout=10)
+            
+            print(f"   Status: {response.status_code}")
+            
+            if response.status_code == 200:
+                data = response.json()
+                if 'coordinates' in data and len(data['coordinates']) >= 3:
+                    self.log_test("KML Parsing", True)
+                    return True
+                else:
+                    self.log_test("KML Parsing", False, "Invalid coordinates in response")
+                    return False
+            else:
+                self.log_test("KML Parsing", False, f"Expected 200, got {response.status_code}")
+                return False
+                
+        except Exception as e:
+            self.log_test("KML Parsing", False, f"Request failed: {str(e)}")
+            return False
+
     def run_all_tests(self):
         """Run all API tests"""
         print("🚀 Starting Crop Health Monitoring API Tests")
