@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Eye, EyeOff, Sprout, Map, TrendingUp } from 'lucide-react';
+import { Eye, EyeOff, Sprout, Map, TrendingUp, Users, Globe, Award, ChevronRight, Leaf, CloudSun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -51,50 +51,98 @@ export default function LandingPage({ onAuthSuccess }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-green-50 to-emerald-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+      {/* Header */}
+      <header className="border-b border-green-100 bg-white/60 backdrop-blur-md">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Sprout className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">
+                  Maplink
+                </h1>
+                <p className="text-xs text-gray-600">Agricultural Innovation Leader</p>
+              </div>
+            </div>
+            <nav className="hidden md:flex items-center space-x-6 text-sm">
+              <a href="#about" className="text-gray-700 hover:text-green-700 transition-colors">About</a>
+              <a href="#features" className="text-gray-700 hover:text-green-700 transition-colors">Solutions</a>
+              <a href="#stats" className="text-gray-700 hover:text-green-700 transition-colors">Impact</a>
+            </nav>
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[calc(100vh-96px)]">
+      <section className="container mx-auto px-6 py-16">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Side - Company Info */}
           <div className="space-y-8">
-            <div className="flex items-center space-x-3">
-              <div className="w-14 h-14 bg-gradient-to-br from-sky-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <Sprout className="w-8 h-8 text-white" />
-              </div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-sky-600 to-green-600 bg-clip-text text-transparent">
-                Maplink
-              </h1>
+            <div className="inline-flex items-center space-x-2 bg-green-100 px-4 py-2 rounded-full">
+              <Award className="w-4 h-4 text-green-700" />
+              <span className="text-sm font-medium text-green-800">Industry Leading AgriTech Platform</span>
             </div>
 
-            <div className="space-y-4">
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight">
-                Smart Agriculture
-                <span className="block text-sky-600">Field Monitoring</span>
+            <div className="space-y-6">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                Precision Agriculture
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-600 mt-2">
+                  Field Monitoring
+                </span>
               </h2>
-              <p className="text-lg text-gray-600 max-w-xl">
-                Monitor crop health, track field boundaries, and optimize agricultural productivity with advanced mapping technology.
+              <p className="text-lg text-gray-700 leading-relaxed max-w-xl">
+                Transform agricultural productivity with our advanced satellite mapping, AI-powered crop health analytics, and real-time field monitoring solutions trusted by farmers worldwide.
               </p>
             </div>
 
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-6 pt-4">
+              <div className="space-y-1">
+                <div className="text-3xl font-bold text-green-700">50K+</div>
+                <div className="text-sm text-gray-600">Active Farms</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-3xl font-bold text-green-700">2M+</div>
+                <div className="text-sm text-gray-600">Acres Monitored</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-3xl font-bold text-green-700">98%</div>
+                <div className="text-sm text-gray-600">Satisfaction</div>
+              </div>
+            </div>
+
             {/* Features */}
-            <div className="grid gap-4 mt-8">
-              <div className="flex items-start space-x-4 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-sky-100 shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 bg-sky-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Map className="w-6 h-6 text-sky-600" />
+            <div className="grid gap-4 pt-4">
+              <div className="flex items-start space-x-4 p-5 bg-white/70 backdrop-blur-sm rounded-2xl border border-green-100 shadow-md hover:shadow-lg transition-all">
+                <div className="w-14 h-14 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Globe className="w-7 h-7 text-green-600" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Interactive Field Mapping</h3>
-                  <p className="text-sm text-gray-600">Draw and manage field boundaries with precision mapping tools</p>
+                <div className="flex-1">
+                  <h3 className="font-bold text-gray-900 mb-2 text-lg">Satellite & Drone Mapping</h3>
+                  <p className="text-sm text-gray-600">High-resolution field imagery with real-time boundary tracking and multi-layer visualization</p>
                 </div>
               </div>
 
-              <div className="flex items-start space-x-4 p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-green-100 shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <TrendingUp className="w-6 h-6 text-green-600" />
+              <div className="flex items-start space-x-4 p-5 bg-white/70 backdrop-blur-sm rounded-2xl border border-green-100 shadow-md hover:shadow-lg transition-all">
+                <div className="w-14 h-14 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <TrendingUp className="w-7 h-7 text-green-600" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Health Index Monitoring</h3>
-                  <p className="text-sm text-gray-600">Track crop health metrics and growth patterns over time</p>
+                <div className="flex-1">
+                  <h3 className="font-bold text-gray-900 mb-2 text-lg">AI Crop Health Analytics</h3>
+                  <p className="text-sm text-gray-600">Advanced algorithms analyze vegetation indices, soil moisture, and growth patterns</p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4 p-5 bg-white/70 backdrop-blur-sm rounded-2xl border border-green-100 shadow-md hover:shadow-lg transition-all">
+                <div className="w-14 h-14 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <CloudSun className="w-7 h-7 text-green-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-gray-900 mb-2 text-lg">Weather & Climate Integration</h3>
+                  <p className="text-sm text-gray-600">Predictive insights with localized weather data and climate impact forecasting</p>
                 </div>
               </div>
             </div>
@@ -103,51 +151,54 @@ export default function LandingPage({ onAuthSuccess }) {
           {/* Right Side - Auth Form */}
           <div className="flex justify-center lg:justify-end">
             <div className="w-full max-w-md">
-              <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20">
+              <div className="bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl p-10 border-2 border-green-100">
                 <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                    {isLogin ? 'Welcome Back' : 'Get Started'}
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <Leaf className="w-9 h-9 text-white" />
+                  </div>
+                  <h3 className="text-3xl font-bold text-gray-900 mb-2">
+                    {isLogin ? 'Welcome Back' : 'Start Growing'}
                   </h3>
                   <p className="text-gray-600">
-                    {isLogin ? 'Sign in to your account' : 'Create your account'}
+                    {isLogin ? 'Access your dashboard' : 'Join thousands of farmers'}
                   </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
                   {!isLogin && (
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="text-gray-700">Full Name</Label>
+                      <Label htmlFor="name" className="text-gray-800 font-medium">Full Name</Label>
                       <Input
                         id="name"
                         name="name"
                         type="text"
-                        placeholder="John Doe"
+                        placeholder="John Farmer"
                         value={formData.name}
                         onChange={handleChange}
                         required={!isLogin}
                         data-testid="signup-name-input"
-                        className="h-11 border-gray-200 focus:border-sky-500"
+                        className="h-12 border-2 border-gray-200 focus:border-green-500 rounded-xl"
                       />
                     </div>
                   )}
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-gray-700">Email</Label>
+                    <Label htmlFor="email" className="text-gray-800 font-medium">Email Address</Label>
                     <Input
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="you@example.com"
+                      placeholder="you@farm.com"
                       value={formData.email}
                       onChange={handleChange}
                       required
                       data-testid={isLogin ? "login-email-input" : "signup-email-input"}
-                      className="h-11 border-gray-200 focus:border-sky-500"
+                      className="h-12 border-2 border-gray-200 focus:border-green-500 rounded-xl"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="password" className="text-gray-700">Password</Label>
+                    <Label htmlFor="password" className="text-gray-800 font-medium">Password</Label>
                     <div className="relative">
                       <Input
                         id="password"
@@ -158,12 +209,12 @@ export default function LandingPage({ onAuthSuccess }) {
                         onChange={handleChange}
                         required
                         data-testid={isLogin ? "login-password-input" : "signup-password-input"}
-                        className="h-11 pr-10 border-gray-200 focus:border-sky-500"
+                        className="h-12 pr-12 border-2 border-gray-200 focus:border-green-500 rounded-xl"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                         data-testid="toggle-password-visibility"
                       >
                         {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -175,26 +226,40 @@ export default function LandingPage({ onAuthSuccess }) {
                     type="submit"
                     disabled={loading}
                     data-testid={isLogin ? "login-submit-button" : "signup-submit-button"}
-                    className="w-full h-11 bg-gradient-to-r from-sky-500 to-green-600 hover:from-sky-600 hover:to-green-700 text-white font-medium shadow-lg hover:shadow-xl transition-all"
+                    className="w-full h-12 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all text-base"
                   >
                     {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Account')}
+                    <ChevronRight className="w-5 h-5 ml-2" />
                   </Button>
                 </form>
 
-                <div className="mt-6 text-center">
+                <div className="mt-8 text-center">
                   <button
                     onClick={() => setIsLogin(!isLogin)}
                     data-testid="toggle-auth-mode"
-                    className="text-sm text-gray-600 hover:text-sky-600 transition-colors"
+                    className="text-sm text-gray-600 hover:text-green-700 transition-colors font-medium"
                   >
-                    {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+                    {isLogin ? "New to Maplink? Create account" : "Already registered? Sign in"}
                   </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Trust Section */}
+      <section className="container mx-auto px-6 py-12 border-t border-green-100 bg-white/40 backdrop-blur-sm">
+        <div className="text-center mb-8">
+          <p className="text-sm text-gray-600 font-medium mb-4">TRUSTED BY LEADING ORGANIZATIONS</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
+            <div className="text-2xl font-bold text-gray-700">AGRI CORP</div>
+            <div className="text-2xl font-bold text-gray-700">FARMTECH</div>
+            <div className="text-2xl font-bold text-gray-700">CROP SOLUTIONS</div>
+            <div className="text-2xl font-bold text-gray-700">GREEN VALLEY</div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

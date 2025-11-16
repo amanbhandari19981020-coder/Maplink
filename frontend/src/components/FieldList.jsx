@@ -24,20 +24,20 @@ export default function FieldList({ fields, selectedField, onSelectField }) {
             data-testid={`field-item-${field.id}`}
             className={`w-full text-left p-4 rounded-xl transition-all ${
               selectedField?.id === field.id
-                ? 'bg-gradient-to-r from-sky-100 to-green-100 border-2 border-sky-300 shadow-md'
-                : 'bg-white/60 border border-sky-100 hover:bg-white hover:shadow-sm'
+                ? 'bg-gradient-to-r from-green-100 to-emerald-100 border-2 border-green-400 shadow-md'
+                : 'bg-white/70 border border-green-200 hover:bg-white hover:shadow-sm'
             }`}
           >
             <div className="flex items-start space-x-3">
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                selectedField?.id === field.id ? 'bg-sky-500' : 'bg-green-100'
+                selectedField?.id === field.id ? 'bg-green-600' : 'bg-green-100'
               }`}>
                 <Sprout className={`w-5 h-5 ${
                   selectedField?.id === field.id ? 'text-white' : 'text-green-600'
                 }`} />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-gray-800 truncate" data-testid={`field-name-${field.id}`}>
+                <h3 className="font-semibold text-gray-900 truncate" data-testid={`field-name-${field.id}`}>
                   {field.name}
                 </h3>
                 <p className="text-sm text-gray-600 truncate" data-testid={`field-crop-${field.id}`}>
@@ -46,7 +46,7 @@ export default function FieldList({ fields, selectedField, onSelectField }) {
                 <div className="mt-2 flex items-center space-x-2">
                   <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-sky-500 to-green-500 rounded-full transition-all"
+                      className="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full transition-all"
                       style={{ width: `${field.health_index}%` }}
                     />
                   </div>

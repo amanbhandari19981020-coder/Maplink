@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, status, UploadFile, File
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
@@ -12,6 +12,9 @@ import uuid
 from datetime import datetime, timezone, timedelta
 from passlib.context import CryptContext
 import jwt
+from fastkml import kml
+from lxml import etree
+import io
 
 
 ROOT_DIR = Path(__file__).parent
@@ -71,6 +74,39 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
         raise HTTPException(status_code=401, detail="User not found")
     return user
 
+def parse_kml_coordinates(kml_content: bytes) -> List[Dict[str, float]]:
+    """Parse KML file and extract coordinates"""
+    try:
+        k = kml.KML()
+        k.from_string(kml_content)
+        
+        coordinates = []
+        
+        # Iterate through KML features
+        for feature in k.features():
+            for placemark in feature.features():
+                if hasattr(placemark, 'geometry') and placemark.geometry:
+                    geom = placemark.geometry
+                    
+                    # Handle Polygon
+                    if geom.geom_type == 'Polygon':
+                        coords = list(geom.exterior.coords)
+                        for coord in coords:
+                            coordinates.append({'lat': coord[1], 'lng': coord[0]})
+                    # Handle LineString
+                    elif geom.geom_type == 'LineString':
+                        coords = list(geom.coords)
+                        for coord in coords:
+                            coordinates.append({'lat': coord[1], 'lng': coord[0]})
+                    # Handle Point
+                    elif geom.geom_type == 'Point':
+                        coord = geom.coords[0]
+                        coordinates.append({'lat': coord[1], 'lng': coord[0]})
+        
+        return coordinates
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid KML file: {str(e)}")
+
 
 # Models
 class UserRegister(BaseModel):
@@ -124,6 +160,9 @@ class FieldUpdate(BaseModel):
     health_index: Optional[float] = PydanticField(None, ge=0, le=100)
     coordinates: Optional[List[FieldCoordinates]] = None
 
+class KMLParseResponse(BaseModel):
+    coordinates: List[FieldCoordinates]
+
 
 # Auth Routes
 @api_router.post("/auth/register", response_model=AuthResponse)
@@ -145,6 +184,27 @@ async def register(user_data: UserRegister):
     user_dict['created_at'] = user_dict['created_at'].isoformat()
     
     await db.users.insert_one(user_dict)
+    
+    # Create sample field for new user
+    sample_field = Field(
+        user_id=user.id,
+        name="Sample Field - Demo",
+        crop_type="Wheat",
+        start_date="2024-11-01",
+        health_index=85.0,
+        coordinates=[
+            FieldCoordinates(lat=28.7041, lng=77.1025),
+            FieldCoordinates(lat=28.7051, lng=77.1025),
+            FieldCoordinates(lat=28.7051, lng=77.1045),
+            FieldCoordinates(lat=28.7041, lng=77.1045),
+            FieldCoordinates(lat=28.7041, lng=77.1025)
+        ]
+    )
+    
+    sample_dict = sample_field.model_dump()
+    sample_dict['created_at'] = sample_dict['created_at'].isoformat()
+    sample_dict['coordinates'] = [coord.model_dump() for coord in sample_field.coordinates]
+    await db.fields.insert_one(sample_dict)
     
     # Create token
     token = create_access_token({"sub": user.id, "email": user.email})
@@ -178,6 +238,22 @@ async def get_me(current_user: dict = Depends(get_current_user)):
     if isinstance(current_user['created_at'], str):
         current_user['created_at'] = datetime.fromisoformat(current_user['created_at'])
     return User(**current_user)
+
+
+# KML Parse Route
+@api_router.post("/kml/parse", response_model=KMLParseResponse)
+async def parse_kml(file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
+    """Parse uploaded KML file and return coordinates"""
+    if not file.filename.endswith('.kml'):
+        raise HTTPException(status_code=400, detail="File must be a KML file")
+    
+    content = await file.read()
+    coordinates = parse_kml_coordinates(content)
+    
+    if len(coordinates) < 3:
+        raise HTTPException(status_code=400, detail="KML file must contain at least 3 coordinates")
+    
+    return KMLParseResponse(coordinates=[FieldCoordinates(**coord) for coord in coordinates])
 
 
 # Field Routes

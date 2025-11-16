@@ -1,6 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { Button } from '@/components/ui/button';
+import { Layers } from 'lucide-react';
 
 // Fix for default marker icons in Leaflet with Webpack
 delete L.Icon.Default.prototype._getIconUrl;
@@ -14,13 +16,15 @@ export default function FieldMap({ fields, selectedField, onSelectField }) {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const layersRef = useRef([]);
+  const [mapLayer, setMapLayer] = useState('street'); // 'street' or 'satellite'
+  const tileLayerRef = useRef(null);
 
   useEffect(() => {
     // Initialize map
     if (!mapInstanceRef.current) {
       mapInstanceRef.current = L.map(mapRef.current).setView([20.5937, 78.9629], 5); // India center
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      tileLayerRef.current = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
         maxZoom: 19,
       }).addTo(mapInstanceRef.current);
@@ -54,8 +58,8 @@ export default function FieldMap({ fields, selectedField, onSelectField }) {
       const isSelected = selectedField?.id === field.id;
       
       const polygon = L.polygon(latlngs, {
-        color: isSelected ? '#0ea5e9' : '#10b981',
-        fillColor: isSelected ? '#0ea5e9' : '#10b981',
+        color: isSelected ? '#16a34a' : '#10b981',
+        fillColor: isSelected ? '#16a34a' : '#10b981',
         fillOpacity: isSelected ? 0.4 : 0.2,
         weight: isSelected ? 3 : 2,
       }).addTo(mapInstanceRef.current);
@@ -93,9 +97,46 @@ export default function FieldMap({ fields, selectedField, onSelectField }) {
     }
   }, [fields, selectedField, onSelectField]);
 
+  const toggleMapLayer = () => {
+    if (!mapInstanceRef.current || !tileLayerRef.current) return;
+
+    // Remove current tile layer
+    mapInstanceRef.current.removeLayer(tileLayerRef.current);
+
+    if (mapLayer === 'street') {
+      // Switch to satellite
+      tileLayerRef.current = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles © Esri',
+        maxZoom: 19,
+      }).addTo(mapInstanceRef.current);
+      setMapLayer('satellite');
+    } else {
+      // Switch to street
+      tileLayerRef.current = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19,
+      }).addTo(mapInstanceRef.current);
+      setMapLayer('street');
+    }
+  };
+
   return (
     <div className="w-full h-full relative">
       <div ref={mapRef} className="w-full h-full" data-testid="field-map" />
+      
+      {/* Map Layer Toggle */}
+      <div className="absolute top-4 right-4 z-[1000]">
+        <Button
+          onClick={toggleMapLayer}
+          data-testid="map-layer-toggle"
+          className="bg-white hover:bg-gray-50 text-gray-800 shadow-lg border-2 border-green-200"
+          size="sm"
+        >
+          <Layers className="w-4 h-4 mr-2" />
+          {mapLayer === 'street' ? 'Satellite' : 'Street'}
+        </Button>
+      </div>
+
       {fields.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm pointer-events-none">
           <div className="text-center text-gray-500">

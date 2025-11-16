@@ -89,37 +89,37 @@ export default function Dashboard({ onLogout }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-sky-50 via-green-50 to-emerald-50">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
         <div className="text-lg font-medium text-gray-600">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gradient-to-br from-sky-50 via-green-50 to-emerald-50">
+    <div className="h-screen flex flex-col bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-sky-100 shadow-sm z-10">
+      <header className="bg-white/90 backdrop-blur-md border-b border-green-200 shadow-md z-10">
         <div className="px-6 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-sky-500 to-green-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-lg">M</span>
+            <div className="w-11 h-11 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+              <span className="text-white font-bold text-xl">M</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-800">Maplink</h1>
-              <p className="text-xs text-gray-500">Field Monitoring System</p>
+              <h1 className="text-xl font-bold text-gray-900">Maplink</h1>
+              <p className="text-xs text-gray-600">Field Monitoring System</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-medium text-gray-800" data-testid="user-name">{user?.name}</p>
-              <p className="text-xs text-gray-500" data-testid="user-email">{user?.email}</p>
+              <p className="text-sm font-medium text-gray-900" data-testid="user-name">{user?.name}</p>
+              <p className="text-xs text-gray-600" data-testid="user-email">{user?.email}</p>
             </div>
             <Button
               onClick={handleLogout}
               variant="outline"
               size="sm"
               data-testid="logout-button"
-              className="border-sky-200 hover:bg-sky-50 hover:text-sky-700"
+              className="border-green-300 hover:bg-green-50 hover:text-green-800 font-medium"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Logout
@@ -131,12 +131,12 @@ export default function Dashboard({ onLogout }) {
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Panel - Field List */}
-        <div className="w-80 bg-white/60 backdrop-blur-sm border-r border-sky-100 flex flex-col">
-          <div className="p-4 border-b border-sky-100 bg-white/40">
+        <div className="w-80 bg-white/70 backdrop-blur-sm border-r border-green-200 flex flex-col shadow-lg">
+          <div className="p-4 border-b border-green-200 bg-white/60">
             <Button
               onClick={() => setShowAddDialog(true)}
               data-testid="add-field-button"
-              className="w-full bg-gradient-to-r from-sky-500 to-green-600 hover:from-sky-600 hover:to-green-700 text-white shadow-md"
+              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-md font-medium"
             >
               <Plus className="w-4 h-4 mr-2" />
               Add New Field
@@ -159,7 +159,7 @@ export default function Dashboard({ onLogout }) {
         </div>
 
         {/* Right Panel - Field Details */}
-        <div className="w-96 bg-white/60 backdrop-blur-sm border-l border-sky-100 overflow-y-auto">
+        <div className="w-96 bg-white/70 backdrop-blur-sm border-l border-green-200 overflow-y-auto shadow-lg">
           <FieldDetails
             field={selectedField}
             onUpdate={handleUpdateField}
