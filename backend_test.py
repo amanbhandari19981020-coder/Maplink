@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 
 class CropHealthAPITester:
-    def __init__(self, base_url="https://field-tracker-31.preview.emergentagent.com"):
+    def __init__(self, base_url="https://agrimap-health.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.token = None
