@@ -49,52 +49,7 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
     };
   }, [open]);
 
-  const handleMapClick = (e) => {
-    if (!isDrawing) return;
-
-    const { lat, lng } = e.latlng;
-    const newCoords = [...formData.coordinates, { lat, lng }];
-
-    // Add marker
-    const marker = L.circleMarker([lat, lng], {
-      radius: 6,
-      fillColor: '#16a34a',
-      color: '#fff',
-      weight: 2,
-      opacity: 1,
-      fillOpacity: 0.8
-    }).addTo(mapInstanceRef.current);
-
-    markersRef.current.push(marker);
-
-    // Update polygon
-    if (polygonRef.current) {
-      mapInstanceRef.current.removeLayer(polygonRef.current);
-    }
-
-    if (newCoords.length >= 2) {
-      const latlngs = newCoords.map(coord => [coord.lat, coord.lng]);
-      polygonRef.current = L.polygon(latlngs, {
-        color: '#10b981',
-        fillColor: '#10b981',
-        fillOpacity: 0.3,
-        weight: 2,
-      }).addTo(mapInstanceRef.current);
-    }
-
-    setFormData(prev => ({ ...prev, coordinates: newCoords }));
-  };
-
-  const handleStartDrawing = () => {
-    setIsDrawing(true);
-    toast.info('Click on the map to draw field boundaries');
-  };
-
-  const handleClearDrawing = () => {
-    // Clear markers
-    markersRef.current.forEach(marker => mapInstanceRef.current.removeLayer(marker));
-    markersRef.current = [];
-
+  const handleClearKML = () => {
     // Clear polygon
     if (polygonRef.current) {
       mapInstanceRef.current.removeLayer(polygonRef.current);
@@ -102,7 +57,11 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
     }
 
     setFormData(prev => ({ ...prev, coordinates: [] }));
-    setIsDrawing(false);
+    
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const handleKMLUpload = async (e) => {
