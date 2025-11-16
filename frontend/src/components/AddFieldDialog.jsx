@@ -137,6 +137,8 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
       crop_type: '',
       start_date: '',
       health_index: 75,
+      farmer_name: '',
+      contact_number: '',
       coordinates: []
     });
     handleClearKML();
