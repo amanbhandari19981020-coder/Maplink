@@ -90,12 +90,12 @@ def parse_kml_coordinates(kml_content: bytes) -> List[Dict[str, float]]:
                     
                     # Handle Polygon
                     if geom.geom_type == 'Polygon':
-                        coords = list(geom.exterior.coords)
+                        coords = geom.exterior.coords
                         for coord in coords:
                             coordinates.append({'lat': coord[1], 'lng': coord[0]})
                     # Handle LineString
                     elif geom.geom_type == 'LineString':
-                        coords = list(geom.coords)
+                        coords = geom.coords
                         for coord in coords:
                             coordinates.append({'lat': coord[1], 'lng': coord[0]})
                     # Handle Point
