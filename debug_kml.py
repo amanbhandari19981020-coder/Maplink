@@ -23,11 +23,14 @@ def debug_kml_parsing():
         coordinates = []
         
         # Iterate through KML features
-        for feature in k.features:
-            print(f"Feature: {feature}")
+        print(f"Number of features: {len(k.features)}")
+        for i, feature in enumerate(k.features):
+            print(f"Feature {i}: {feature}")
             print(f"Feature type: {type(feature)}")
+            print(f"Feature name: {getattr(feature, 'name', 'No name')}")
+            print(f"Number of sub-features: {len(feature.features) if hasattr(feature, 'features') else 'No features attr'}")
             
-            for placemark in feature.features:
+            for j, placemark in enumerate(feature.features):
                 print(f"Placemark: {placemark}")
                 print(f"Placemark type: {type(placemark)}")
                 
