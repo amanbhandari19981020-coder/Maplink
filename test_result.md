@@ -101,3 +101,81 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+
+user_problem_statement: "Remove polygon drawing option from Add Field dialog and keep only KML file upload functionality"
+
+backend:
+  - task: "KML parse endpoint"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "KML parsing endpoint exists and is functional for parsing uploaded KML files"
+
+frontend:
+  - task: "Remove polygon drawing from AddFieldDialog"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/AddFieldDialog.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Successfully removed Tabs component, drawing functionality (handleMapClick, handleStartDrawing, isDrawing state, markers). Kept only KML upload with map preview. Dialog now shows single KML upload section instead of tabs."
+
+  - task: "Field display on map"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/FieldMap.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "No changes made to FieldMap component - it only displays fields, no drawing functionality"
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: true
+
+test_plan:
+  current_focus:
+    - "KML parse endpoint"
+    - "Remove polygon drawing from AddFieldDialog"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: |
+      Completed removal of polygon drawing functionality from AddFieldDialog:
+      
+      Changes made:
+      1. Removed Tabs component and all tab-related imports
+      2. Removed drawing-related state (isDrawing, activeTab)
+      3. Removed drawing functions (handleMapClick, handleStartDrawing)
+      4. Removed markers reference (markersRef)
+      5. Simplified UI to show only KML upload section
+      6. Kept map preview for displaying uploaded KML boundaries
+      7. Updated error messages to reflect KML-only approach
+      8. Added "Clear KML" button when coordinates are loaded
+      
+      Visual confirmation done via screenshot - dialog now shows:
+      - Field details form (name, crop type, date, health index)
+      - Single KML upload section with drag-and-drop area
+      - Map preview appears only after KML is uploaded
+      - No drawing tabs or buttons visible
+      
+      Ready for comprehensive backend and frontend testing.
