@@ -18,12 +18,10 @@ import {
 export default function FieldDetails({ field, onUpdate, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [showGEEModal, setShowGEEModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     crop_type: '',
     start_date: '',
-    health_index: 0,
     farmer_name: '',
     contact_number: '',
     imagery_url: ''
