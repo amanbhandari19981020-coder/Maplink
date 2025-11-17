@@ -234,7 +234,7 @@ async def register(user_data: UserRegister):
         name="Sample Field - Demo",
         crop_type="Wheat",
         start_date="2024-11-01",
-        health_index=85.0,
+        health_index=0,  # Calculated from imagery
         farmer_name="Demo Farmer",
         contact_number="+91-9876543210",
         coordinates=[
