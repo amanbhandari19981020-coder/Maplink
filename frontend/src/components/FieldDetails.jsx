@@ -269,45 +269,34 @@ export default function FieldDetails({ field, onUpdate, onDelete }) {
 
         <Separator />
 
-        {/* Health Index */}
+        {/* Health Index - Calculated from Satellite Data */}
         <div className="space-y-3">
           <Label className="text-sm text-gray-700 flex items-center font-medium">
             <TrendingUp className="w-4 h-4 mr-2 text-green-600" />
-            Health Index
+            Health Index (Auto-Calculated)
           </Label>
-          {isEditing ? (
-            <div className="space-y-2">
-              <Input
-                type="number"
-                min="0"
-                max="100"
-                value={formData.health_index}
-                onChange={(e) => setFormData(prev => ({ ...prev, health_index: parseFloat(e.target.value) || 0 }))}
-                data-testid="edit-health-index"
-                className="border-2 border-green-300 focus:border-green-500"
-              />
-            </div>
-          ) : (
-            <>
-              <div className="flex items-center justify-between">
-                <span className={`text-3xl font-bold ${getHealthColor(field.health_index)}`} data-testid="field-detail-health">
-                  {field.health_index}%
-                </span>
-                <span className={`text-sm font-medium px-3 py-1 rounded-full ${
-                  field.health_index >= 80 ? 'bg-green-100 text-green-800' :
-                  field.health_index >= 50 ? 'bg-yellow-100 text-yellow-700' :
-                  'bg-red-100 text-red-700'
-                }`}>
-                  {getHealthLabel(field.health_index)}
-                </span>
-              </div>
-              <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-green-600 to-emerald-500 rounded-full transition-all duration-500"
-                  style={{ width: `${field.health_index}%` }}
-                />
-              </div>
-            </>
+          <div className="flex items-center justify-between">
+            <span className={`text-3xl font-bold ${getHealthColor(field.health_index)}`} data-testid="field-detail-health">
+              {field.health_index}%
+            </span>
+            <span className={`text-sm font-medium px-3 py-1 rounded-full ${
+              field.health_index >= 80 ? 'bg-green-100 text-green-800' :
+              field.health_index >= 50 ? 'bg-yellow-100 text-yellow-700' :
+              'bg-red-100 text-red-700'
+            }`}>
+              {getHealthLabel(field.health_index)}
+            </span>
+          </div>
+          <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-green-600 to-emerald-500 rounded-full transition-all duration-500"
+              style={{ width: `${field.health_index}%` }}
+            />
+          </div>
+          {field.health_index === 0 && (
+            <p className="text-xs text-gray-500">
+              Run satellite analysis to calculate health index
+            </p>
           )}
         </div>
 
