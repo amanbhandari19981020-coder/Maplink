@@ -239,6 +239,24 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
                 className="border-2 border-gray-200 focus:border-green-500"
               />
             </div>
+
+            <div className="space-y-2 col-span-2">
+              <Label htmlFor="imagery_url" className="font-medium">
+                Google Drive Imagery URL (Planet SkySat GeoTIFF)
+              </Label>
+              <Input
+                id="imagery_url"
+                type="url"
+                placeholder="https://drive.google.com/file/d/..."
+                value={formData.imagery_url}
+                onChange={(e) => setFormData(prev => ({ ...prev, imagery_url: e.target.value }))}
+                data-testid="add-field-imagery-input"
+                className="border-2 border-gray-200 focus:border-green-500"
+              />
+              <p className="text-xs text-gray-600">
+                Optional: Provide Google Drive link to Planet SkySat satellite imagery for health index analysis
+              </p>
+            </div>
           </div>
 
           {/* KML Upload Section */}
