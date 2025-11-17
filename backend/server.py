@@ -181,6 +181,7 @@ class Field(BaseModel):
     health_index: float = PydanticField(ge=0, le=100)
     farmer_name: str
     contact_number: str
+    imagery_url: Optional[str] = None
     coordinates: List[FieldCoordinates]
     created_at: datetime = PydanticField(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -191,6 +192,7 @@ class FieldCreate(BaseModel):
     health_index: float = PydanticField(ge=0, le=100)
     farmer_name: str
     contact_number: str
+    imagery_url: Optional[str] = None
     coordinates: List[FieldCoordinates]
 
 class FieldUpdate(BaseModel):
@@ -200,6 +202,7 @@ class FieldUpdate(BaseModel):
     health_index: Optional[float] = PydanticField(None, ge=0, le=100)
     farmer_name: Optional[str] = None
     contact_number: Optional[str] = None
+    imagery_url: Optional[str] = None
     coordinates: Optional[List[FieldCoordinates]] = None
 
 class KMLParseResponse(BaseModel):
