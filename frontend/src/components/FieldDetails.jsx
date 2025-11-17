@@ -26,7 +26,8 @@ export default function FieldDetails({ field, onUpdate, onDelete }) {
     start_date: '',
     health_index: 0,
     farmer_name: '',
-    contact_number: ''
+    contact_number: '',
+    imagery_url: ''
   });
 
   const startEditing = () => {
@@ -36,7 +37,8 @@ export default function FieldDetails({ field, onUpdate, onDelete }) {
       start_date: field.start_date,
       health_index: field.health_index,
       farmer_name: field.farmer_name || '',
-      contact_number: field.contact_number || ''
+      contact_number: field.contact_number || '',
+      imagery_url: field.imagery_url || ''
     });
     setIsEditing(true);
   };
