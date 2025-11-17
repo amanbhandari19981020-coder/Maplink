@@ -15,7 +15,7 @@ import jwt
 from fastkml import kml
 from lxml import etree
 import io
-from gee_service import gee_service
+from imagery_service import imagery_service
 
 
 ROOT_DIR = Path(__file__).parent
