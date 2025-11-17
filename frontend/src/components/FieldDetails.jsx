@@ -14,6 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import SatelliteAnalysisModal from './SatelliteAnalysisModal';
 
 export default function FieldDetails({ field, onUpdate, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
