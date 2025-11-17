@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar, Sprout, TrendingUp, Edit2, Trash2, Save, X, User, Phone, Map } from 'lucide-react';
+import { Calendar, Sprout, TrendingUp, Edit2, Trash2, Save, X, User, Phone, Map, Satellite } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,7 +14,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import GEEAppModal from './GEEAppModal';
 
 export default function FieldDetails({ field, onUpdate, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
