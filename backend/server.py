@@ -178,7 +178,7 @@ class Field(BaseModel):
     name: str
     crop_type: str
     start_date: str
-    health_index: float = PydanticField(ge=0, le=100)
+    health_index: float = PydanticField(default=0, ge=0, le=100)
     farmer_name: str
     contact_number: str
     imagery_url: Optional[str] = None
@@ -189,7 +189,6 @@ class FieldCreate(BaseModel):
     name: str
     crop_type: str
     start_date: str
-    health_index: float = PydanticField(ge=0, le=100)
     farmer_name: str
     contact_number: str
     imagery_url: Optional[str] = None
@@ -199,7 +198,6 @@ class FieldUpdate(BaseModel):
     name: Optional[str] = None
     crop_type: Optional[str] = None
     start_date: Optional[str] = None
-    health_index: Optional[float] = PydanticField(None, ge=0, le=100)
     farmer_name: Optional[str] = None
     contact_number: Optional[str] = None
     imagery_url: Optional[str] = None
