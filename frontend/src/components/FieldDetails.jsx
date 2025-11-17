@@ -196,6 +196,36 @@ export default function FieldDetails({ field, onUpdate, onDelete }) {
 
         <Separator />
 
+        {/* Imagery URL */}
+        <div className="space-y-2">
+          <Label className="text-sm text-gray-700 flex items-center font-medium">
+            <Map className="w-4 h-4 mr-2 text-green-600" />
+            Satellite Imagery (Google Drive)
+          </Label>
+          {isEditing ? (
+            <Input
+              type="url"
+              placeholder="https://drive.google.com/file/d/..."
+              value={formData.imagery_url}
+              onChange={(e) => setFormData(prev => ({ ...prev, imagery_url: e.target.value }))}
+              data-testid="edit-imagery-url"
+              className="border-2 border-green-300 focus:border-green-500"
+            />
+          ) : (
+            <p className="text-sm text-gray-900 break-all" data-testid="field-detail-imagery">
+              {field.imagery_url ? (
+                <a href={field.imagery_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                  View Imagery
+                </a>
+              ) : (
+                <span className="text-gray-500">No imagery URL provided</span>
+              )}
+            </p>
+          )}
+        </div>
+
+        <Separator />
+
         {/* Crop Type */}
         <div className="space-y-2">
           <Label className="text-sm text-gray-700 flex items-center font-medium">
