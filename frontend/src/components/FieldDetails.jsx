@@ -32,7 +32,6 @@ export default function FieldDetails({ field, onUpdate, onDelete }) {
       name: field.name,
       crop_type: field.crop_type,
       start_date: field.start_date,
-      health_index: field.health_index,
       farmer_name: field.farmer_name || '',
       contact_number: field.contact_number || '',
       imagery_url: field.imagery_url || ''
