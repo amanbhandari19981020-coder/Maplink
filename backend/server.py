@@ -179,8 +179,8 @@ class Field(BaseModel):
     crop_type: str
     start_date: str
     health_index: float = PydanticField(default=0, ge=0, le=100)
-    farmer_name: str
-    contact_number: str
+    farmer_name: Optional[str] = None
+    contact_number: Optional[str] = None
     imagery_url: Optional[str] = None
     coordinates: List[FieldCoordinates]
     created_at: datetime = PydanticField(default_factory=lambda: datetime.now(timezone.utc))
