@@ -137,16 +137,22 @@ export default function FieldDetails({ field, onUpdate, onDelete }) {
       </div>
 
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
-        {/* Health Index Analysis Button */}
+        {/* Satellite Analysis Button */}
         <div>
           <Button
-            onClick={() => setShowGEEModal(true)}
+            onClick={() => alert('Satellite analysis feature - Add imagery URL and call /api/fields/' + field.id + '/analysis')}
             className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg"
             data-testid="health-analysis-button"
+            disabled={!field.imagery_url}
           >
-            <Map className="w-4 h-4 mr-2" />
-            Health Index Analysis (GEE)
+            <Satellite className="w-4 h-4 mr-2" />
+            Satellite Analysis
           </Button>
+          {!field.imagery_url && (
+            <p className="text-xs text-gray-500 mt-2 text-center">
+              Add imagery URL to enable analysis
+            </p>
+          )}
         </div>
 
         <Separator />
