@@ -394,7 +394,7 @@ async def delete_field(field_id: str, current_user: dict = Depends(get_current_u
     return {"message": "Field deleted successfully"}
 
 
-# GEE Analysis Routes
+# Imagery Analysis Routes
 @api_router.get("/fields/{field_id}/analysis")
 async def get_field_analysis(field_id: str, current_user: dict = Depends(get_current_user)):
     """Get satellite imagery analysis for a field"""
@@ -403,22 +403,17 @@ async def get_field_analysis(field_id: str, current_user: dict = Depends(get_cur
     if not field:
         raise HTTPException(status_code=404, detail="Field not found")
     
-    # Get analysis from GEE service
-    analysis_result = gee_service.get_field_analysis(field_id, field['coordinates'])
+    # Check if imagery URL is provided
+    if not field.get('imagery_url'):
+        return {
+            'status': 'error',
+            'message': f'No imagery found for field "{field["name"]}". Please add a Google Drive URL for the Planet SkySat GeoTIFF image.'
+        }
+    
+    # Process imagery
+    analysis_result = imagery_service.process_field_imagery(field_id, field['imagery_url'])
     
     return analysis_result
-
-@api_router.get("/gee/status")
-async def get_gee_status(current_user: dict = Depends(get_current_user)):
-    """Check GEE service status and configuration"""
-    initialized = gee_service.initialize()
-    
-    return {
-        "initialized": initialized,
-        "status": "ready" if initialized else "pending_credentials",
-        "message": "GEE service is ready" if initialized else "Add GEE credentials to enable satellite analysis",
-        "credentials_path": gee_service.credentials_path
-    }
 
 
 
