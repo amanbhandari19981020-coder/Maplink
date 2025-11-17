@@ -315,6 +315,13 @@ export default function FieldDetails({ field, onUpdate, onDelete }) {
         </div>
       </div>
 
+      {/* Satellite Analysis Modal */}
+      <SatelliteAnalysisModal
+        open={showAnalysisModal}
+        onClose={() => setShowAnalysisModal(false)}
+        field={field}
+      />
+
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
