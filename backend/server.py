@@ -390,6 +390,34 @@ async def delete_field(field_id: str, current_user: dict = Depends(get_current_u
     return {"message": "Field deleted successfully"}
 
 
+# GEE Analysis Routes
+@api_router.get("/fields/{field_id}/analysis")
+async def get_field_analysis(field_id: str, current_user: dict = Depends(get_current_user)):
+    """Get satellite imagery analysis for a field"""
+    # Get field
+    field = await db.fields.find_one({"id": field_id, "user_id": current_user['id']}, {"_id": 0})
+    if not field:
+        raise HTTPException(status_code=404, detail="Field not found")
+    
+    # Get analysis from GEE service
+    analysis_result = gee_service.get_field_analysis(field_id, field['coordinates'])
+    
+    return analysis_result
+
+@api_router.get("/gee/status")
+async def get_gee_status(current_user: dict = Depends(get_current_user)):
+    """Check GEE service status and configuration"""
+    initialized = gee_service.initialize()
+    
+    return {
+        "initialized": initialized,
+        "status": "ready" if initialized else "pending_credentials",
+        "message": "GEE service is ready" if initialized else "Add GEE credentials to enable satellite analysis",
+        "credentials_path": gee_service.credentials_path
+    }
+
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
