@@ -24,6 +24,7 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
     health_index: 75,
     farmer_name: '',
     contact_number: '',
+    imagery_url: '',
     coordinates: []
   });
   const [uploadingKML, setUploadingKML] = useState(false);
