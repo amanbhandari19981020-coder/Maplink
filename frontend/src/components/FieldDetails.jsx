@@ -142,13 +142,13 @@ export default function FieldDetails({ field, onUpdate, onDelete }) {
         {/* Satellite Analysis Button */}
         <div>
           <Button
-            onClick={() => alert('Satellite analysis feature - Add imagery URL and call /api/fields/' + field.id + '/analysis')}
+            onClick={() => setShowAnalysisModal(true)}
             className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg"
             data-testid="health-analysis-button"
             disabled={!field.imagery_url}
           >
             <Satellite className="w-4 h-4 mr-2" />
-            Satellite Analysis
+            Run Satellite Analysis
           </Button>
           {!field.imagery_url && (
             <p className="text-xs text-gray-500 mt-2 text-center">
