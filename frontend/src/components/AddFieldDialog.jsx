@@ -197,21 +197,6 @@ export default function AddFieldDialog({ open, onClose, onAdd }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="health_index" className="font-medium">Health Index (%)</Label>
-              <Input
-                id="health_index"
-                type="number"
-                min="0"
-                max="100"
-                value={formData.health_index}
-                onChange={(e) => setFormData(prev => ({ ...prev, health_index: parseFloat(e.target.value) || 0 }))}
-                required
-                data-testid="add-field-health-input"
-                className="border-2 border-gray-200 focus:border-green-500"
-              />
-            </div>
-
-            <div className="space-y-2">
               <Label htmlFor="farmer_name" className="font-medium">Farmer Name</Label>
               <Input
                 id="farmer_name"
