@@ -324,13 +324,6 @@ export default function FieldDetails({ field, onUpdate, onDelete }) {
         </div>
       </div>
 
-      {/* GEE App Modal */}
-      <GEEAppModal 
-        open={showGEEModal} 
-        onClose={() => setShowGEEModal(false)} 
-        field={field}
-      />
-
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent>
