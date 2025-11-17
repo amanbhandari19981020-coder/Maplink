@@ -19,6 +19,7 @@ import SatelliteAnalysisModal from './SatelliteAnalysisModal';
 export default function FieldDetails({ field, onUpdate, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showAnalysisModal, setShowAnalysisModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     crop_type: '',
